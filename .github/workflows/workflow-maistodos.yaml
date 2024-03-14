@@ -16,10 +16,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
 
-      - name: Change to Terraform directory
-        run: cd infra/
-
       - name: Terraform Init
         run: | 
-          ls -lha && 
+          cd infra/ && 
           terraform init

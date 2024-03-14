@@ -52,5 +52,5 @@ jobs:
         id: tf_show
         run: cd infra/ && terraform show plan.out
 
-      # - name: Terraform Apply
-      #   run: cd infra/ && terraform apply -auto-approve -input=false -lock-timeout=120s plan.out
+      - name: Terraform Apply
+        run: cd infra/ && terraform apply -auto-approve -input=false -lock-timeout=120s plan.out

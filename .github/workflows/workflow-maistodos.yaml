@@ -17,7 +17,9 @@ jobs:
         uses: hashicorp/setup-terraform@v1
 
       - name: Change to Terraform directory
-        run: cd /home/runner/work/maistodos/maistodos
+        run: ls -lha
 
       - name: Terraform Init
         run: terraform init
+
+# cd /home/runner/work/maistodos/maistodos

@@ -1,0 +1,16 @@
+name: Install Tools on EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  install-tools:
+    runs-on: self-hosted
+    steps:
+      - name: Install Tool via SSH in K3S Master
+        run: |
+          ssh k3s-master-1 "sudo apt update -qqy && sudo apt full-upgrade -y && sudo apt remove -y && sudo apt clean -y"
+
+

@@ -42,3 +42,17 @@ jobs:
         run: | 
           cd infra/
           terraform init
+
+      - name: Terraform Format
+        run: terraform fmt -check
+
+      - name: Terraform Plan
+        run: terraform plan -var 'context=labs' -out=plan.out -input=false -lock-timeout=120s
+        # continue-on-error: true
+
+      - name: Terraform Show Plan
+        id: tf_show
+        run: terraform show plan.out
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve -input=false -lock-timeout=120s plan.out

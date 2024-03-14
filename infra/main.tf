@@ -5,7 +5,6 @@ resource "aws_vpc" "mais_todos_vpc" {
   cidr_block           = var.vpc_cidr_block
   tags = {
     Name = "${var.project_name}-vpc"
-    # "kubernetes.io/cluster/${var.cluster-name}" = "shared"
   }
 }
 
@@ -47,8 +46,6 @@ resource "aws_subnet" "mais_todos_public_subnet" {
 
   tags = {
     "Name" = "${var.project_name}-public-subnet"
-    # "kubernetes.io/role/elb"     = "1"
-    # "kubernetes.io/cluster/${var.project_name}" = "owned"
   }
 }
 
@@ -60,8 +57,6 @@ resource "aws_subnet" "mais_todos_private_subnet_app" {
 
   tags = {
     Name = "${var.project_name}-private-subnet-app"
-    # "kubernetes.io/role/internal-elb" = "1"
-    # "kubernetes.io/cluster/${var.project_name}" = "owned"
   }
 }
 
@@ -73,8 +68,6 @@ resource "aws_subnet" "mais_todos_private_subnet_db" {
 
   tags = {
     Name = "${var.project_name}-private-subnet-db"
-    # "kubernetes.io/role/internal-elb" = "1"
-    # "kubernetes.io/cluster/${var.project_name}" = "owned"
   }
 }
 
@@ -222,7 +215,6 @@ resource "aws_instance" "k3s_master_1" {
   associate_public_ip_address = var.linux_associate_public_ip
   source_dest_check = false
   key_name = aws_key_pair.key_pair.key_name
-  # user_data = file("aws-user-data.sh")
   
   # root disk
   root_block_device {
@@ -272,7 +264,6 @@ resource "aws_instance" "k3s_worker_1" {
   associate_public_ip_address = var.linux_associate_public_ip
   source_dest_check = false
   key_name = aws_key_pair.key_pair.key_name
-  # user_data = file("aws-user-data.sh")
   
   # root disk
   root_block_device {
@@ -298,7 +289,6 @@ resource "aws_instance" "k3s_worker_2" {
   associate_public_ip_address = var.linux_associate_public_ip
   source_dest_check = false
   key_name = aws_key_pair.key_pair.key_name
-  # user_data = file("aws-user-data.sh")
   
   # root disk
   root_block_device {
@@ -324,7 +314,6 @@ resource "aws_instance" "ec2_database" {
   associate_public_ip_address = var.linux_associate_public_ip
   source_dest_check = false
   key_name = aws_key_pair.key_pair.key_name
-  # user_data = file("aws-user-data.sh")
   
   # root disk
   root_block_device {
@@ -350,7 +339,6 @@ resource "aws_instance" "ec2_proxy" {
   associate_public_ip_address = true
   source_dest_check = false
   key_name = aws_key_pair.key_pair.key_name
-  # user_data = file("aws-user-data.sh")
   
   # root disk
   root_block_device {

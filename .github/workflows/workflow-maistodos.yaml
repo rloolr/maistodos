@@ -1,4 +1,4 @@
-name: Install Tools on EC2
+name: Infra Mais Todos
 
 on:
   push:
@@ -6,11 +6,9 @@ on:
       - main
 
 jobs:
-  install-tools:
+  create-infra:
     runs-on: self-hosted
     steps:
-      - name: Install Tool via SSH in K3S Master
+      - name: Terraform Init
         run: |
-          ssh k3s-master-1 "sudo apt update -qqy && sudo apt full-upgrade -y && sudo apt remove -y && sudo apt clean -y"
-
-
+          terraform init

@@ -1,6 +1,5 @@
 provider "aws" {
   region  = var.region
-  profile = "s2w"
 }
 
 terraform {
@@ -11,11 +10,11 @@ terraform {
     }
   }
 
-  # backend "s3" {
-  #   bucket = "task-mais-todos"
-  #   region = "us-east-1"
-  #   key = "tfstate-dir/terraform.tfstate"
-  #   encrypt = true
-  # }
+  backend "s3" {
+    bucket = "task-mais-todos"
+    region = "us-east-1"
+    key = "tfstate-dir/terraform.tfstate"
+    encrypt = true
+  }
 }
 

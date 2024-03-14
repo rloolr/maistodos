@@ -154,7 +154,7 @@ resource "aws_security_group" "mais_todos_public_facing_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = {  
+  tags = {
     Name = "${var.project_name}-public-facing-sg"
   }
 }
@@ -167,7 +167,7 @@ resource "aws_security_group" "mais_todos_private_facing_sg" {
   ingress {
     from_port   = 0
     to_port     = 0
-    protocol  = "tcp"
+    protocol    = "tcp"
     cidr_blocks = flatten([var.private_subnet_cidr_blocks_app, var.private_subnet_cidr_blocks_db])
     # Allow traffic from private subnets
   }
@@ -175,7 +175,7 @@ resource "aws_security_group" "mais_todos_private_facing_sg" {
   egress {
     from_port   = 0
     to_port     = 0
-    protocol  = "-1"
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -196,7 +196,7 @@ resource "tls_private_key" "key_pair" {
 }
 # Create the Key Pair
 resource "aws_key_pair" "key_pair" {
-  key_name   = "ec2-key-pair"  
+  key_name   = "ec2-key-pair"
   public_key = tls_private_key.key_pair.public_key_openssh
 }
 # Save file
@@ -208,14 +208,14 @@ resource "local_file" "ssh_key" {
 
 # K3S Master 1
 resource "aws_instance" "k3s_master_1" {
-  ami = var.linux_ami_id
-  instance_type = var.linux_instance_type
-  subnet_id = aws_subnet.mais_todos_private_subnet_app[0].id
-  vpc_security_group_ids = [aws_security_group.mais_todos_private_facing_sg.id]
+  ami                         = var.linux_ami_id
+  instance_type               = var.linux_instance_type
+  subnet_id                   = aws_subnet.mais_todos_private_subnet_app[0].id
+  vpc_security_group_ids      = [aws_security_group.mais_todos_private_facing_sg.id]
   associate_public_ip_address = var.linux_associate_public_ip
-  source_dest_check = false
-  key_name = aws_key_pair.key_pair.key_name
-  
+  source_dest_check           = false
+  key_name                    = aws_key_pair.key_pair.key_name
+
   # root disk
   root_block_device {
     volume_size           = var.linux_root_volume_size
@@ -223,7 +223,7 @@ resource "aws_instance" "k3s_master_1" {
     delete_on_termination = true
     encrypted             = true
   }
-  
+
   tags = {
     Name        = "k3s-master-01"
     Environment = var.app_environment
@@ -240,7 +240,7 @@ resource "aws_instance" "k3s_master_1" {
 #   source_dest_check = false
 #   key_name = aws_key_pair.key_pair.key_name
 #   # user_data = file("aws-user-data.sh")
-  
+
 #   # root disk
 #   root_block_device {
 #     volume_size           = var.linux_root_volume_size
@@ -248,7 +248,7 @@ resource "aws_instance" "k3s_master_1" {
 #     delete_on_termination = true
 #     encrypted             = true
 #   }
-  
+
 #   tags = {
 #     Name        = "k3s-master-02"
 #     Environment = var.app_environment
@@ -257,14 +257,14 @@ resource "aws_instance" "k3s_master_1" {
 
 # K3S Worker 1
 resource "aws_instance" "k3s_worker_1" {
-  ami = var.linux_ami_id
-  instance_type = var.linux_instance_type
-  subnet_id = aws_subnet.mais_todos_private_subnet_app[0].id
-  vpc_security_group_ids = [aws_security_group.mais_todos_private_facing_sg.id]
+  ami                         = var.linux_ami_id
+  instance_type               = var.linux_instance_type
+  subnet_id                   = aws_subnet.mais_todos_private_subnet_app[0].id
+  vpc_security_group_ids      = [aws_security_group.mais_todos_private_facing_sg.id]
   associate_public_ip_address = var.linux_associate_public_ip
-  source_dest_check = false
-  key_name = aws_key_pair.key_pair.key_name
-  
+  source_dest_check           = false
+  key_name                    = aws_key_pair.key_pair.key_name
+
   # root disk
   root_block_device {
     volume_size           = var.linux_root_volume_size
@@ -272,7 +272,7 @@ resource "aws_instance" "k3s_worker_1" {
     delete_on_termination = true
     encrypted             = true
   }
-  
+
   tags = {
     Name        = "k3s-worker-01"
     Environment = var.app_environment
@@ -282,14 +282,14 @@ resource "aws_instance" "k3s_worker_1" {
 
 # K3S Worker 2
 resource "aws_instance" "k3s_worker_2" {
-  ami = var.linux_ami_id
-  instance_type = var.linux_instance_type
-  subnet_id = aws_subnet.mais_todos_private_subnet_app[1].id
-  vpc_security_group_ids = [aws_security_group.mais_todos_private_facing_sg.id]
+  ami                         = var.linux_ami_id
+  instance_type               = var.linux_instance_type
+  subnet_id                   = aws_subnet.mais_todos_private_subnet_app[1].id
+  vpc_security_group_ids      = [aws_security_group.mais_todos_private_facing_sg.id]
   associate_public_ip_address = var.linux_associate_public_ip
-  source_dest_check = false
-  key_name = aws_key_pair.key_pair.key_name
-  
+  source_dest_check           = false
+  key_name                    = aws_key_pair.key_pair.key_name
+
   # root disk
   root_block_device {
     volume_size           = var.linux_root_volume_size
@@ -297,7 +297,7 @@ resource "aws_instance" "k3s_worker_2" {
     delete_on_termination = true
     encrypted             = true
   }
-  
+
   tags = {
     Name        = "k3s-worker-02"
     Environment = var.app_environment
@@ -307,14 +307,14 @@ resource "aws_instance" "k3s_worker_2" {
 
 # EC2 Database
 resource "aws_instance" "ec2_database" {
-  ami = var.linux_ami_id
-  instance_type = var.linux_instance_type
-  subnet_id = aws_subnet.mais_todos_private_subnet_db[0].id
-  vpc_security_group_ids = [aws_security_group.mais_todos_private_facing_sg.id]
+  ami                         = var.linux_ami_id
+  instance_type               = var.linux_instance_type
+  subnet_id                   = aws_subnet.mais_todos_private_subnet_db[0].id
+  vpc_security_group_ids      = [aws_security_group.mais_todos_private_facing_sg.id]
   associate_public_ip_address = var.linux_associate_public_ip
-  source_dest_check = false
-  key_name = aws_key_pair.key_pair.key_name
-  
+  source_dest_check           = false
+  key_name                    = aws_key_pair.key_pair.key_name
+
   # root disk
   root_block_device {
     volume_size           = var.linux_root_volume_size
@@ -322,7 +322,7 @@ resource "aws_instance" "ec2_database" {
     delete_on_termination = true
     encrypted             = true
   }
-  
+
   tags = {
     Name        = "db-postgresql"
     Environment = var.app_environment
@@ -332,14 +332,14 @@ resource "aws_instance" "ec2_database" {
 
 # EC2 Proxy Reverso
 resource "aws_instance" "ec2_proxy" {
-  ami = var.linux_ami_id
-  instance_type = var.linux_instance_type
-  subnet_id = aws_subnet.mais_todos_public_subnet[0].id
-  vpc_security_group_ids = [aws_security_group.mais_todos_private_facing_sg.id]
+  ami                         = var.linux_ami_id
+  instance_type               = var.linux_instance_type
+  subnet_id                   = aws_subnet.mais_todos_public_subnet[0].id
+  vpc_security_group_ids      = [aws_security_group.mais_todos_private_facing_sg.id]
   associate_public_ip_address = true
-  source_dest_check = false
-  key_name = aws_key_pair.key_pair.key_name
-  
+  source_dest_check           = false
+  key_name                    = aws_key_pair.key_pair.key_name
+
   # root disk
   root_block_device {
     volume_size           = var.linux_root_volume_size
@@ -347,7 +347,7 @@ resource "aws_instance" "ec2_proxy" {
     delete_on_termination = true
     encrypted             = true
   }
-  
+
   tags = {
     Name        = "nginx-proxy"
     Environment = var.app_environment

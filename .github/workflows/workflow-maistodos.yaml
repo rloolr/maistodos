@@ -6,9 +6,15 @@ on:
       - main
 
 jobs:
-  create-infra:
-    runs-on: self-hosted
+  ubuntu_job:
+    runs-on: ubuntu-latest
+
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+
       - name: Terraform Init
-        run: |
-          terraform init
+        run: terraform init

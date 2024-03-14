@@ -5,11 +5,23 @@ on:
     branches:
       - main
 
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  # AWS_REGION: ${{ secrets.TF_ADMIN_ACCESS_LABS_AWS_DEFAULT_REGION }}
+
 jobs:
   ubuntu_job:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          # aws-region: ${{ env.AWS_REGION }}
+
       - name: Configure AWS credentials
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -20,8 +32,7 @@ jobs:
           sudo ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
           echo $PATH
           ls -lha /usr/local/bin/
-          /usr/local/bin/aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID && /usr/local/bin/aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-
+          
       - name: Checkout repository
         uses: actions/checkout@v2
 

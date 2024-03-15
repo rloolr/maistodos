@@ -53,7 +53,7 @@ variable "linux_ami_id" {
 variable "linux_instance_type" {
   type        = string
   description = "EC2 instance type for Linux Server"
-  default     = "t3a.nano"
+  default     = "t3a.micro"
 }
 
 variable "linux_associate_public_ip" {

@@ -379,7 +379,7 @@ resource "aws_instance" "ec2_database" {
 # EC2 Proxy Reverso
 resource "aws_instance" "ec2_proxy" {
   ami                         = var.linux_ami_id
-  instance_type               = var.linux_instance_type
+  instance_type               = "t3a.small"
   subnet_id                   = aws_subnet.mais_todos_public_subnet[0].id
   vpc_security_group_ids      = [aws_security_group.mais_todos_public_facing_sg.id]
   associate_public_ip_address = true

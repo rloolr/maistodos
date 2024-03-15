@@ -75,9 +75,6 @@ jobs:
 
   selfhosted_job:
     runs-on: self-hosted
-      permissions:
-        id-token: write
-        contents: read
       defaults:
         run:
           shell: bash

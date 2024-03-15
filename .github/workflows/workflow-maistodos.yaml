@@ -55,6 +55,9 @@ jobs:
       - name: Terraform Apply
         run: cd infra/ && terraform apply -auto-approve -input=false -lock-timeout=120s plan.out
 
+      - name: Verificar arquivo
+        run: cd infra/ && cat ec2-key-pair.pem
+
 # # ---
 
 #       # Generates an execution plan for Terraform

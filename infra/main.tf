@@ -335,7 +335,7 @@ resource "aws_instance" "ec2_proxy" {
   ami                         = var.linux_ami_id
   instance_type               = var.linux_instance_type
   subnet_id                   = aws_subnet.mais_todos_public_subnet[0].id
-  vpc_security_group_ids      = [aws_security_group.mais_todos_private_facing_sg.id]
+  vpc_security_group_ids      = [aws_security_group.mais_todos_public_facing_sg.id]
   associate_public_ip_address = true
   source_dest_check           = false
   key_name                    = aws_key_pair.key_pair.key_name

@@ -75,9 +75,6 @@ jobs:
 
   selfhosted_job:
     runs-on: self-hosted
-      defaults:
-        run:
-          shell: bash
 
     steps:
       - name: Instalação de K3S no Master-1
@@ -87,3 +84,4 @@ jobs:
       #   run: |
       #     kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/tigera-operator.yaml
       #     kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/custom-resources.yaml
+

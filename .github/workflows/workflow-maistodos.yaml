@@ -82,6 +82,17 @@ jobs:
 
       - name: Configuração de K3S no Master-1
         run: |
-            ssh k3s-master-1 'mkdir .kube && sudo mv /etc/rancher/k3s/k3s.yaml .kube/config && sudo chmod 0755 .kube/config'
+            ssh k3s-master-1 'if [ -d .kube ] then echo "O diretório já existe, não é necessário criar." else mkdir .kube fi && sudo mv /etc/rancher/k3s/k3s.yaml .kube/config && sudo chmod 0755 .kube/config'
             ssh k3s-master-1 'kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.2/manifests/tigera-operator.yaml && kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.2/manifests/custom-resources.yaml'
             
+
+
+
+# # Verifica se o diretório existe
+# if [ -d "/caminho/do/seu/diretorio" ]; then
+#     echo "O diretório já existe, não é necessário criar."
+# else
+#     # Se o diretório não existe, então cria
+#     mkdir "/caminho/do/seu/diretorio"
+#     echo "Diretório criado com sucesso!"
+# fi

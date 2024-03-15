@@ -140,10 +140,10 @@ resource "aws_security_group" "mais_todos_public_facing_sg" {
   name   = "mais_todos_public_facing_sg"
 
   ingress {
-    from_port   = 0
-    to_port     = 0
+    from_port   = 22
+    to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = flatten([var.private_subnet_cidr_blocks_app, var.public_subnet_cidr_blocks])
+    cidr_blocks = ["0.0.0.0/0"]
     # Allow traffic from public subnet
   }
 
@@ -168,7 +168,7 @@ resource "aws_security_group" "mais_todos_private_facing_sg" {
     from_port   = 0
     to_port     = 0
     protocol    = "tcp"
-    cidr_blocks = flatten([var.private_subnet_cidr_blocks_app, var.private_subnet_cidr_blocks_db])
+    cidr_blocks = flatten([aws_security_group.mais_todos_public_facing_sg.id, var.private_subnet_cidr_blocks_app, var.private_subnet_cidr_blocks_db])
     # Allow traffic from private subnets
   }
 

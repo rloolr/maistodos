@@ -75,7 +75,6 @@ jobs:
 
   selfhosted_job:
     runs-on: self-hosted
-      environment: labs
       permissions:
         id-token: write
         contents: read

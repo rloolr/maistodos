@@ -82,7 +82,7 @@ jobs:
 
       - name: Configuração de K3S no Master-1
         run: |
-            ssh k3s-master-1 '[ -d .kube ] && echo "O diretório já existe." || mkdir .kube && sudo mv /etc/rancher/k3s/k3s.yaml .kube/config && sudo chmod 0755 .kube/config'
+            ssh k3s-master-1 '[ -d .kube ] && echo "O diretório já existe." || { mkdir .kube && sudo mv /etc/rancher/k3s/k3s.yaml .kube/config && sudo chmod 0755 .kube/config; }'
             ssh k3s-master-1 'kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.2/manifests/tigera-operator.yaml && kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.2/manifests/custom-resources.yaml'
             
 

@@ -75,6 +75,7 @@ jobs:
 
   selfhosted_job:
     runs-on: self-hosted
+    needs: ubuntu_job
 
     steps:
       - name: Instalação de K3S no Master-1

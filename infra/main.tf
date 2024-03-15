@@ -166,8 +166,8 @@ resource "aws_security_group" "mais_todos_private_facing_app_sg" {
   name   = "${var.project_name}-private-facing-app-sg"
 
   ingress {
-    from_port   = 0
-    to_port     = 0
+    from_port   = 6443
+    to_port     = 6443
     protocol    = "tcp"
     cidr_blocks = flatten([var.private_subnet_cidr_blocks_app, var.private_subnet_cidr_blocks_db])
     description = "Rede Privada - All TCP"

@@ -73,9 +73,9 @@ jobs:
 #         # if: github.ref == 'refs/heads/"labs"' && github.event_name == 'push'
 #         run: cd infra/ && terraform apply -auto-approve -input=false -lock-timeout=120s plan.out
 
-  # selfhosted_job:
-  #   runs-on: self-hosted
+  selfhosted_job:
+    runs-on: self-hosted
 
-  #   steps:
-  #     - name: Update Proxy
-  #       run: sudo apt update -qqy && sudo apt full-upgrade -y
+    steps:
+      - name: Update Proxy
+        run: sudo apt update -qqy && sudo apt full-upgrade -y

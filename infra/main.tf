@@ -159,8 +159,8 @@ resource "aws_security_group" "mais_todos_public_facing_sg" {
   }
 }
 
-# Create private facing security group
-resource "aws_security_group" "mais_todos_private_facing_sg" {
+# Create private facing security group for app
+resource "aws_security_group" "mais_todos_private_facing_app_sg" {
   vpc_id = aws_vpc.mais_todos_vpc.id
   name   = "${var.project_name}-private-facing-sg"
 
@@ -168,7 +168,15 @@ resource "aws_security_group" "mais_todos_private_facing_sg" {
     from_port   = 0
     to_port     = 0
     protocol    = "tcp"
-    cidr_blocks = flatten([aws_security_group.mais_todos_public_facing_sg.id, var.private_subnet_cidr_blocks_app, var.private_subnet_cidr_blocks_db])
+    cidr_blocks = flatten([var.private_subnet_cidr_blocks_app, var.private_subnet_cidr_blocks_db])
+    # Allow traffic from private subnets
+  }
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    security_groups  = ["${aws_security_group.mais_todos_public_facing_sg.id}"]
     # Allow traffic from private subnets
   }
 
@@ -180,7 +188,40 @@ resource "aws_security_group" "mais_todos_private_facing_sg" {
   }
 
   tags = {
-    Name = "${var.project_name}-private-facing-sg"
+    Name = "${var.project_name}-private-facing-app-sg"
+  }
+}
+
+# Create private facing security group for db
+resource "aws_security_group" "mais_todos_private_facing_db_sg" {
+  vpc_id = aws_vpc.mais_todos_vpc.id
+  name   = "${var.project_name}-private-facing-sg"
+
+  ingress {
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    security_groups  = ["${aws_security_group.mais_todos_private_facing_app_sg.id}"]
+    # Allow traffic from private subnets
+  }
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    security_groups  = ["${aws_security_group.mais_todos_public_facing_sg.id}"]
+    # Allow traffic from private subnets
+  }  
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "${var.project_name}-private-facing-app-sg"
   }
 }
 
@@ -211,7 +252,7 @@ resource "aws_instance" "k3s_master_1" {
   ami                         = var.linux_ami_id
   instance_type               = var.linux_instance_type
   subnet_id                   = aws_subnet.mais_todos_private_subnet_app[0].id
-  vpc_security_group_ids      = [aws_security_group.mais_todos_private_facing_sg.id]
+  vpc_security_group_ids      = [aws_security_group.mais_todos_private_facing_app_sg.id]
   associate_public_ip_address = var.linux_associate_public_ip
   source_dest_check           = false
   key_name                    = aws_key_pair.key_pair.key_name
@@ -260,7 +301,7 @@ resource "aws_instance" "k3s_worker_1" {
   ami                         = var.linux_ami_id
   instance_type               = var.linux_instance_type
   subnet_id                   = aws_subnet.mais_todos_private_subnet_app[0].id
-  vpc_security_group_ids      = [aws_security_group.mais_todos_private_facing_sg.id]
+  vpc_security_group_ids      = [aws_security_group.mais_todos_private_facing_app_sg.id]
   associate_public_ip_address = var.linux_associate_public_ip
   source_dest_check           = false
   key_name                    = aws_key_pair.key_pair.key_name
@@ -285,7 +326,7 @@ resource "aws_instance" "k3s_worker_2" {
   ami                         = var.linux_ami_id
   instance_type               = var.linux_instance_type
   subnet_id                   = aws_subnet.mais_todos_private_subnet_app[1].id
-  vpc_security_group_ids      = [aws_security_group.mais_todos_private_facing_sg.id]
+  vpc_security_group_ids      = [aws_security_group.mais_todos_private_facing_app_sg.id]
   associate_public_ip_address = var.linux_associate_public_ip
   source_dest_check           = false
   key_name                    = aws_key_pair.key_pair.key_name
@@ -310,7 +351,7 @@ resource "aws_instance" "ec2_database" {
   ami                         = var.linux_ami_id
   instance_type               = var.linux_instance_type
   subnet_id                   = aws_subnet.mais_todos_private_subnet_db[0].id
-  vpc_security_group_ids      = [aws_security_group.mais_todos_private_facing_sg.id]
+  vpc_security_group_ids      = [aws_security_group.mais_todos_private_facing_db_sg.id]
   associate_public_ip_address = var.linux_associate_public_ip
   source_dest_check           = false
   key_name                    = aws_key_pair.key_pair.key_name

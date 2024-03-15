@@ -78,21 +78,17 @@ jobs:
 
     steps:
       - name: Instalação de K3S no Master-1
-        run: ssh k3s-master-1 'sudo curl -sfL https://get.k3s.io | K3S_KUBECONFIG_MODE="644" INSTALL_K3S_EXEC="--flannel-backend=none --cluster-cidr=192.168.0.0/16 --disable-network-policy --disable=traefik" sudo sh -'
+        run: ssh k3s-master-1 'curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644'
 
       - name: Configuração de K3S no Master-1
         run: |
-            ssh k3s-master-1 '[ -d .kube ] && echo "O diretório já existe." || { mkdir .kube && sudo mv /etc/rancher/k3s/k3s.yaml .kube/config && sudo chmod 0755 .kube/config; }'
-            ssh k3s-master-1 'kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.2/manifests/tigera-operator.yaml && kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.2/manifests/custom-resources.yaml'
-            
+          ip_address=$(ssh k3s-master-1 "hostname -I | cut -d' ' -f1") && node_token=$(ssh k3s-master-1 "cat /var/lib/rancher/k3s/server/node-token") && ssh k3s-worker-1 "curl -sfL https://get.k3s.io | K3S_URL=https://$ip_address:6443 K3S_TOKEN='$node_token' sh -"                      
 
 
+# ip_address=$(ssh k3s-master-1 "hostname -I | cut -d' ' -f1")
+# node_token=$(cat /var/lib/rancher/k3s/server/node-token)
 
-# # Verifica se o diretório existe
-# if [ -d "/caminho/do/seu/diretorio" ]; then
-#     echo "O diretório já existe, não é necessário criar."
-# else
-#     # Se o diretório não existe, então cria
-#     mkdir "/caminho/do/seu/diretorio"
-#     echo "Diretório criado com sucesso!"
-# fi
+# curl -sfL https://get.k3s.io | K3S_URL=https://$ip_address:6443 K3S_TOKEN="$node_token" sh -
+
+
+# ip_address=$(ssh k3s-master-1 "hostname -I | cut -d' ' -f1") && node_token=$(ssh k3s-master-1 "cat /var/lib/rancher/k3s/server/node-token") && ssh k3s-worker-1 "curl -sfL https://get.k3s.io | K3S_URL=https://$ip_address:6443 K3S_TOKEN='$node_token' sh -"

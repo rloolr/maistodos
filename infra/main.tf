@@ -144,6 +144,7 @@ resource "aws_security_group" "mais_todos_public_facing_sg" {
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+    description = "Internet - Porta 22"
     # Allow traffic from public subnet
   }
 
@@ -169,6 +170,7 @@ resource "aws_security_group" "mais_todos_private_facing_app_sg" {
     to_port     = 0
     protocol    = "tcp"
     cidr_blocks = flatten([var.private_subnet_cidr_blocks_app, var.private_subnet_cidr_blocks_db])
+    description = "Rede Privada - All TCP"
     # Allow traffic from private subnets
   }
 
@@ -177,6 +179,7 @@ resource "aws_security_group" "mais_todos_private_facing_app_sg" {
     to_port     = 22
     protocol    = "tcp"
     security_groups  = ["${aws_security_group.mais_todos_public_facing_sg.id}"]
+    description = "SG Proxy - Porta 22"
     # Allow traffic from private subnets
   }
 
@@ -202,6 +205,7 @@ resource "aws_security_group" "mais_todos_private_facing_db_sg" {
     to_port     = 5432
     protocol    = "tcp"
     security_groups  = ["${aws_security_group.mais_todos_private_facing_app_sg.id}"]
+    description = "SG APP - Porta 5432"
     # Allow traffic from private subnets
   }
 
@@ -210,6 +214,7 @@ resource "aws_security_group" "mais_todos_private_facing_db_sg" {
     to_port     = 22
     protocol    = "tcp"
     security_groups  = ["${aws_security_group.mais_todos_public_facing_sg.id}"]
+    description = "EC2 Proxy - Porta 22"
     # Allow traffic from private subnets
   }  
 

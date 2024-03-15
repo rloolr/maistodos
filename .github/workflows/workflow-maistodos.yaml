@@ -44,22 +44,8 @@ jobs:
       - name: Terraform Format
         run: cd infra/ && terraform fmt -check
 
-      # - name: Terraform Plan
-      #   run: cd infra/ && terraform plan -out=plan.out -input=false -lock-timeout=120s
-      #   # continue-on-error: true
-
-      # - name: Terraform Show Plan
-      #   id: tf_show
-      #   run: cd infra/ && terraform show plan.out
-
-      # - name: Terraform Apply
-      #   run: cd infra/ && terraform apply -auto-approve -input=false -lock-timeout=120s plan.out
-
-# ---
-
-      # Generates an execution plan for Terraform
       - name: Terraform Plan
-        run: cd infra/ && terraform plan -out=plan.out -input=false -lock-timeout=120s -destroy
+        run: cd infra/ && terraform plan -out=plan.out -input=false -lock-timeout=120s
         # continue-on-error: true
 
       - name: Terraform Show Plan
@@ -67,5 +53,19 @@ jobs:
         run: cd infra/ && terraform show plan.out
 
       - name: Terraform Apply
-        # if: github.ref == 'refs/heads/"labs"' && github.event_name == 'push'
         run: cd infra/ && terraform apply -auto-approve -input=false -lock-timeout=120s plan.out
+
+# # ---
+
+#       # Generates an execution plan for Terraform
+#       - name: Terraform Plan
+#         run: cd infra/ && terraform plan -out=plan.out -input=false -lock-timeout=120s -destroy
+#         # continue-on-error: true
+
+#       - name: Terraform Show Plan
+#         id: tf_show
+#         run: cd infra/ && terraform show plan.out
+
+#       - name: Terraform Apply
+#         # if: github.ref == 'refs/heads/"labs"' && github.event_name == 'push'
+#         run: cd infra/ && terraform apply -auto-approve -input=false -lock-timeout=120s plan.out

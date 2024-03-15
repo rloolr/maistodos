@@ -90,4 +90,4 @@ jobs:
 # curl -sfL https://get.k3s.io | K3S_URL=https://$ip_address:6443 K3S_TOKEN="$node_token" sh -
 
 
-# ip_address=$(ssh k3s-master-1 "hostname -I | cut -d' ' -f1") && node_token=$(ssh k3s-master-1 "cat /var/lib/rancher/k3s/server/node-token") && ssh k3s-worker-1 "curl -sfL https://get.k3s.io | K3S_URL=https://$ip_address:6443 K3S_TOKEN='$node_token' sh -"
+# ip_address=$(ssh k3s-master-1 "hostname -I | cut -d' ' -f1") && node_token=$(ssh k3s-master-1 "sudo cat /var/lib/rancher/k3s/server/node-token") && ssh k3s-worker-1 "curl -sfL https://get.k3s.io | K3S_URL=https://$ip_address:6443 K3S_TOKEN='$node_token' sh -"

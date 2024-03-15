@@ -162,7 +162,7 @@ resource "aws_security_group" "mais_todos_public_facing_sg" {
 # Create private facing security group for app
 resource "aws_security_group" "mais_todos_private_facing_app_sg" {
   vpc_id = aws_vpc.mais_todos_vpc.id
-  name   = "${var.project_name}-private-facing-sg"
+  name   = "${var.project_name}-private-facing-app-sg"
 
   ingress {
     from_port   = 0
@@ -195,7 +195,7 @@ resource "aws_security_group" "mais_todos_private_facing_app_sg" {
 # Create private facing security group for db
 resource "aws_security_group" "mais_todos_private_facing_db_sg" {
   vpc_id = aws_vpc.mais_todos_vpc.id
-  name   = "${var.project_name}-private-facing-sg"
+  name   = "${var.project_name}-private-facing-db-sg"
 
   ingress {
     from_port   = 5432
@@ -221,7 +221,7 @@ resource "aws_security_group" "mais_todos_private_facing_db_sg" {
   }
 
   tags = {
-    Name = "${var.project_name}-private-facing-app-sg"
+    Name = "${var.project_name}-private-facing-db-sg"
   }
 }
 
